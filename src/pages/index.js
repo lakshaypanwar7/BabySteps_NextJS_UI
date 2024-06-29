@@ -1,29 +1,33 @@
-import Head from "next/head";
+import { useState, useEffect } from "react";
 import Header from "../components/Header";
-import Card from "../components/Card";
 import Steps from "../components/Steps";
 import Footer from "../components/Footer";
-import styles from "../styles/Home.module.css";
+import Modal from "../components/Modal";
 
 const Home = () => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  useEffect(() => {
+    const lastShown = localStorage.getItem("modalLastShown");
+    const now = new Date().getTime();
+    const twentyFourHours = 24 * 60 * 60 * 1000;
+
+    if (!lastShown || now - parseInt(lastShown, 10) > twentyFourHours) {
+      setIsModalVisible(true);
+      localStorage.setItem("modalLastShown", now.toString());
+    }
+  }, []);
+
+  const handleCloseModal = () => {
+    setIsModalVisible(false);
+  };
+
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Financial Health Check</title>
-        <meta
-          name="description"
-          content="Check your financial health with WeathoMeter"
-        />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className={styles.main}>
-        <Header />
-        <Card />
-        <Steps />
-      </main>
-
+    <div>
+      <Header />
+      <Steps />
       <Footer />
+      <Modal isVisible={isModalVisible} onClose={handleCloseModal} />
     </div>
   );
 };
