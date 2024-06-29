@@ -8,13 +8,12 @@ const Home = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   useEffect(() => {
-    const lastShown = localStorage.getItem("modalLastShown");
-    const now = new Date().getTime();
-    const twentyFourHours = 24 * 60 * 60 * 1000;
+    const lastShownDate = localStorage.getItem("modalLastShownDate");
+    const today = new Date().toDateString();
 
-    if (!lastShown || now - parseInt(lastShown, 10) > twentyFourHours) {
+    if (lastShownDate !== today) {
       setIsModalVisible(true);
-      localStorage.setItem("modalLastShown", now.toString());
+      localStorage.setItem("modalLastShownDate", today);
     }
   }, []);
 
